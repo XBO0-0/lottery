@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		#wrap{
+			position: relative;
+			text-align: center;
+			width: 200px;
+		}
+		span{
+			font-size: 40px;
+			line-height: 100px;
+		}
+		canvas{
+			border:1px solid black;
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+	</style>
+</head>
+<body>
+	<div id="wrap">
+		<span>谢谢惠顾</span>
+		<canvas id="canvas" width="200" height="100"></canvas>
+	</div>
+</body>
+<script type="text/javascript">
+	// 刮刮乐
+
+	var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
+
+	var wrap = document.getElementById("wrap");
+	var wrapLeft = wrap.offsetLeft;
+	var wrapTop = wrap.offsetTop;
+
+
+	// 给canvas绘制一个涂层
+	context.beginPath();
+	context.fillStyle = "#ccc";
+	context.fillRect(0,0,canvas.width,canvas.height);
+	context.closePath();
+
+
+	// 设置图像组合方式
+	context.globalCompositeOperation = "destination-out";
+
+	// 添加事件
+	canvas.onmousedown = function(){
+
+		// 鼠标移动的时候
+		canvas.onmousemove = function(e){
+			var e = e || window.event;
+
+			// 获取鼠标移动的坐标
+			var mouseMoveX = e.clientX;
+			var mouseMoveY = e.clientY;
+			// 绘制图形
+			context.beginPath();
+			// x,y,r,sA,eA,bol
+			context.arc(mouseMoveX - wrapLeft, mouseMoveY - wrapTop, 10, 0, Math.PI*2,false);
+			context.fill();
+			context.closePath();
+
+			阻止默认事件
+			return false;
+			e.preventDefault();
+		}
+	}
+
+	// 鼠标松开
+	document.onmouseup = function(){
+		canvas.onmousemove = null;
+	}
+</script>
+</html>
